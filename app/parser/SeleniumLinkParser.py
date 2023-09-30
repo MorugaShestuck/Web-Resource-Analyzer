@@ -69,3 +69,5 @@ if __name__ == "__main__":
     parser.crawl(start_url, max_depth)
     parser.print()
     print(parser.length())
+
+
