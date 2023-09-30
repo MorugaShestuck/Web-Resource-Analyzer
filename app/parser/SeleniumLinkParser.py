@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
 
-class SeleniumParser:
+class SeleniumLinkParser:
     def __init__(self, driver_path=""):
         self.driver_path = driver_path
         self.site_links = []
