@@ -1,16 +1,16 @@
-from app.parser.SeleniumLinkParser import SeleniumParser
-from app.parser.ClassicLinkParser import ClassicParser
+from app.parser.SeleniumLinkParser import SeleniumLinkParser
+from app.parser.ClassicLinkParser import ClassicLinkParser
 from bs4 import BeautifulSoup
 import requests
 
 
 def parse_urls(url, depth=1):
     if len(BeautifulSoup(requests.get(url).text, "html.parser").find_all('a', href=True)) <= 3:
-        p = SeleniumParser()
+        p = SeleniumLinkParser()
         p.crawl(url, depth)
         return p
     else:
-        p = ClassicParser()
+        p = ClassicLinkParser()
         p.crawl(url, depth)
         return p
 
