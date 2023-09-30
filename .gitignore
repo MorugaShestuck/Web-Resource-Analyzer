@@ -21,3 +21,5 @@ __pycache__/
 .env
 venv/
 virtualenv/
+
+app/debug.py
