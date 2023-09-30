@@ -59,7 +59,7 @@ class HashTable:
 
     def load(self, json_file):
         try:
-            with open(json_file, 'r') as file:
+            with open(json_file, 'r', encoding='utf-8') as file:
                 data = json.load(file)
                 for key, value in data.items():
                     self.insert(key, value)
@@ -73,3 +73,14 @@ class HashTable:
                 data[key] = value
         with open(json_file, 'w') as file:
             json.dump(data, file)
+
+    def __iter__(self):
+        for bucket in self.buckets:
+            for key, value in bucket:
+                yield key, value
+
+
+if __name__ == "__main__":
+    h = HashTable()
+    h.load("../analyzer/data.json")
+    print(h.get("налоговый учет"))
