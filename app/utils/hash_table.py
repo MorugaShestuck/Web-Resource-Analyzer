@@ -82,5 +82,5 @@ class HashTable:
 
 if __name__ == "__main__":
     h = HashTable()
-    h.load("../analyzer/data.json")
-    print(h.get("налоговый учет"))
+    h.load("../data/categories.json")
+    print(h.get("Ремонт"))
