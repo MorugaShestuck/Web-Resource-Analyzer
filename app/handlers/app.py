@@ -12,9 +12,9 @@ from app.utils.hash_table import HashTable
 app = FastAPI()
 
 keywords, categories = HashTable(), HashTable()
-keywords.load("data/data.json")
-categories.load("data/categories.json")
-cache = Cache(cache_file="data/cache.json")
+keywords.load("app/data/data.json")
+categories.load("app/data/categories.json")
+cache = Cache(cache_file="app/data/cache.json")
 
 @app.get('/ping')
 async def ping():
