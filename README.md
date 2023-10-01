@@ -30,13 +30,6 @@ cd theme-web-resources-kokoc
 pip install -r requirements.txt
 ```
 
-## Run
-
-To run project locally, simple run `main.py` file:
-```bash
-python3 main.py
-```
-
 ## Usage
 
 To use WRA, you can run it locally or deploy it in a Docker container.
@@ -50,6 +43,10 @@ python main.py
 ### Running with Docker Compose
 
 You can also run WRA in a Docker container. Make sure you have Docker and Docker Compose installed. Then, run the following command:
+
+```bash
+docker-compose build
+```
 
 ```bash
 docker-compose up
@@ -102,18 +99,6 @@ docker-compose up
   - `url` (str): The URL of the domain.
   - `depth` (int, optional): The depth for analysis (default is 1).
 - **Returns:** JSON containing the categories and themes found in the domain.
-
-## Docker Compose
-
-You can run WRA in a Docker container using Docker Compose. The Docker Compose configuration is provided in the `docker-compose.yml` file. To start the container, use the following commands:
-
-```bash
-docker-compose build
-```
-
-```bash
-docker-compose up
-```
 
 [//]: # (## Contributing)
 
