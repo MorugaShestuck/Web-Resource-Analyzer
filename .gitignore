@@ -18,6 +18,9 @@ __pycache__/
 *.bak
 *.swp
 
+app/data/cache.json
+app/data/chromedriver.exe
+
 .env
 venv/
 virtualenv/
