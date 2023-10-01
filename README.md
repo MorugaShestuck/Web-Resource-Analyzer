@@ -16,9 +16,12 @@ WRA (Web Resource Analyzer) is a tool for analyzing web resources, checking URLs
   - [Check URL](#check-url)
   - [Check URLs](#check-urls)
   - [Check Domain](#check-domain)
-- [Docker Compose](#docker-compose)
-- [Contributing](#contributing)
-- [License](#license)
+
+[//]: # (- [Docker Compose]&#40;#docker-compose&#41;)
+
+[//]: # (- [Contributing]&#40;#contributing&#41;)
+
+[//]: # (- [License]&#40;#license&#41;)
 
 ## Installation
 
