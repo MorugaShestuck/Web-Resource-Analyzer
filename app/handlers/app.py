@@ -1,4 +1,3 @@
-import logging
 from typing import Dict, List
 
 from fastapi import FastAPI
@@ -18,11 +17,23 @@ cache = Cache(cache_file="app/data/cache.json")
 
 @app.get('/ping')
 async def ping():
+    """
+    Ping endpoint to check if the server is running.
+    """
     return {"message": "pong"}
 
-
 @app.get('/get_pages')
-async def get_pages(url, depth: int = 1):
+async def get_pages(url: str, depth: int = 1):
+    """
+    Retrieve web pages starting from a given URL and a specified depth.
+
+    Args:
+        url (str): The starting URL.
+        depth (int): The depth to crawl (default is 1).
+
+    Returns:
+        Dict: A dictionary containing the links retrieved.
+    """
     try:
         p = parser.parse_urls(url, depth)
         links = p.site_links[:depth]
@@ -31,9 +42,18 @@ async def get_pages(url, depth: int = 1):
         print(e)
         return {"error": str(e)}
 
-
 @app.get("/check_url")
 async def check_url(url: str, depth: int = 1):
+    """
+    Check a single URL for categories and themes.
+
+    Args:
+        url (str): The URL to check.
+        depth (int): The depth for analysis (default is 1).
+
+    Returns:
+        Dict: A dictionary containing the categories and themes found.
+    """
     try:
         cache.load_cache()
         cached_data = cache.get_data(url)
@@ -56,11 +76,19 @@ async def check_url(url: str, depth: int = 1):
         print(e)
         return {"error": str(e)}
 
-
 @app.post("/check_urls")
 async def check_urls(request_data: Dict[str, List[str]], depth: int = 1):
+    """
+    Check multiple URLs for categories and themes.
+
+    Args:
+        request_data (Dict[str, List[str]]): JSON data with a list of URLs.
+        depth (int): The depth for analysis (default is 1).
+
+    Returns:
+        Dict: A dictionary containing the results for each URL.
+    """
     urls = request_data.get("urls", [])
-    print(depth)
     results = []
 
     for url in urls:
@@ -95,6 +123,16 @@ async def check_urls(request_data: Dict[str, List[str]], depth: int = 1):
 
 @app.get('/check_domain')
 async def check_domain(url: str, depth: int = 1):
+    """
+    Check a domain for categories and themes based on its linked pages.
+
+    Args:
+        url (str): The URL of the domain.
+        depth (int): The depth for analysis (default is 1).
+
+    Returns:
+        Dict: A dictionary containing the categories and themes found in the domain.
+    """
     try:
         results = {"categories": [], "themes": []}
         p = parser.parse_urls(url, depth)

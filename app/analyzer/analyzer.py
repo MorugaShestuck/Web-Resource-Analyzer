@@ -5,6 +5,29 @@ import openpyxl
 
 
 class Analyzer:
+    """
+    A class for analyzing content based on provided keywords and URL.
+
+    Args:
+        keywords (list): A list of tuples where each tuple contains a keyword and its associated topic.
+        url (str, optional): The URL of the content to analyze. Defaults to an empty string.
+
+    Attributes:
+        keywords (list): The list of keyword-topic tuples for analysis.
+        url (str): The URL of the content being analyzed.
+        score (dict): A dictionary to store topic scores.
+        frequent_keywords (dict): A dictionary to store frequently occurring keywords and their counts.
+
+    Methods:
+        set_url(url): Set the URL to analyze.
+        analyze_content(content): Analyze the content based on the provided keywords.
+        get_score(depth=None): Get the topic scores in descending order. Optionally, limit the number of results by depth.
+        get_frequent_keywords(): Get frequently occurring keywords and their counts.
+        reset(): Reset the topic scores and frequent keywords.
+        get_url(): Get the currently set URL.
+        load_keywords(keywords): Update the list of keywords for analysis.
+    """
+
     def __init__(self, keywords, url=""):
         self.keywords = keywords
         self.url = url
@@ -12,9 +35,16 @@ class Analyzer:
         self.frequent_keywords = {}
 
     def set_url(self, url):
+        """Set the URL to analyze."""
         self.url = url
 
     def analyze_content(self, content):
+        """
+        Analyze the content based on the provided keywords.
+
+        Args:
+            content (str): The content to analyze.
+        """
         for keyword, topic in self.keywords:
             count = content.lower().count(keyword.lower())
             if topic not in self.score:
@@ -27,6 +57,15 @@ class Analyzer:
                 self.frequent_keywords[keyword] += count
 
     def get_score(self, depth=None):
+        """
+        Get the topic scores in descending order.
+
+        Args:
+            depth (int, optional): Limit the number of results to the specified depth. Defaults to None.
+
+        Returns:
+            dict: A dictionary containing topic scores.
+        """
         sorted_keywords = sorted(self.score.items(), key=lambda x: x[1], reverse=True)
 
         if depth is None:
@@ -43,18 +82,38 @@ class Analyzer:
             return result
 
     def get_frequent_keywords(self):
+        """
+        Get frequently occurring keywords and their counts.
+
+        Returns:
+            dict: A dictionary containing frequently occurring keywords and their counts.
+        """
         sorted_keywords = sorted(self.frequent_keywords.items(), key=lambda x: x[1], reverse=True)
         return {k: v for k, v in sorted_keywords if v > 0}
 
     def reset(self):
+        """Reset the topic scores and frequent keywords."""
         self.score = {}
         self.frequent_keywords = {}
 
     def get_url(self):
+        """
+        Get the currently set URL.
+
+        Returns:
+            str: The currently set URL.
+        """
         return self.url
 
     def load_keywords(self, keywords):
+        """
+        Update the list of keywords for analysis.
+
+        Args:
+            keywords (list): A list of tuples where each tuple contains a keyword and its associated topic.
+        """
         self.keywords = keywords
+
 
 
 if __name__ == "__main__":
