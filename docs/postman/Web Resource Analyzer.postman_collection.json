@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "6520f62d-f0ae-4598-bbd1-4873f70cf140",
+		"name": "Web Resource Analyzer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22985569"
+	},
+	"item": [
+		{
+			"name": "check_url",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/check_url?url=https://www.bgoperator.ru/&depth=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"check_url"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "https://www.bgoperator.ru/"
+						},
+						{
+							"key": "depth",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_pages",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/get_pages?url=https://pet-mir.ru/&depth=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"get_pages"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "https://pet-mir.ru/"
+						},
+						{
+							"key": "depth",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check_domain",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:5000/check_domain?url=https://pet-mir.ru/&depth=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"check_domain"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "https://pet-mir.ru/"
+						},
+						{
+							"key": "depth",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check_urls",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"urls\": [\"https://sbermegamarket.ru/catalog/audiosistemy-dlya-lodok-i-katerov/\", \"http://do.vanmk.ru/index.php/distantsionnoe-obuchenie\", \"https://www.bgoperator.ru/\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/check_urls?depth=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"check_urls"
+					],
+					"query": [
+						{
+							"key": "depth",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ping",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
