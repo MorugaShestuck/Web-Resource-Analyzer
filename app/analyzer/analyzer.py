@@ -26,10 +26,10 @@ class Analyzer:
                     self.frequent_keywords[keyword] = 0
                 self.frequent_keywords[keyword] += count
 
-    def get_score(self, deep=None):
+    def get_score(self, depth=None):
         sorted_keywords = sorted(self.score.items(), key=lambda x: x[1], reverse=True)
 
-        if deep is None:
+        if depth is None:
             return {k: v for k, v in sorted_keywords if v > 0}
         else:
             result = {}
@@ -38,7 +38,7 @@ class Analyzer:
                 if v > 0:
                     result[k] = v
                     count += 1
-                    if count >= deep:
+                    if count >= depth:
                         break
             return result
 
