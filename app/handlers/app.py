@@ -1,12 +1,13 @@
+import logging
 from typing import Dict, List
 
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 from app.analyzer.analyzer import Analyzer
 from app.parser import parser, ContentParser
 from app.utils.Cache import Cache
 from app.utils.hash_table import HashTable
-
 
 app = FastAPI()
 
@@ -14,6 +15,18 @@ keywords, categories = HashTable(), HashTable()
 keywords.load("app/data/data.json")
 categories.load("app/data/categories.json")
 cache = Cache(cache_file="app/data/cache.json")
+logging.basicConfig(filename="app.log", level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
+
+class GetPagesRequest(BaseModel):
+    url: str
+    depth: int = 1
+
+
+class GetPagesResponse(BaseModel):
+    code: int
+    data: Dict[str, List[str]]
+
 
 @app.get('/ping')
 async def ping():
@@ -22,8 +35,9 @@ async def ping():
     """
     return {"message": "pong"}
 
-@app.get('/get_pages')
-async def get_pages(url: str, depth: int = 1):
+
+@app.get('/get_pages', response_model=GetPagesResponse)
+async def get_pages(request_data: GetPagesRequest):
     """
     Retrieve web pages starting from a given URL and a specified depth.
 
@@ -33,14 +47,19 @@ async def get_pages(url: str, depth: int = 1):
 
     Returns:
         Dict: A dictionary containing the links retrieved.
+        :param request_data:
     """
     try:
+        url = request_data.url
+        depth = request_data.depth
         p = parser.parse_urls(url, depth)
         links = p.site_links[:depth]
         return {"code": 200, "data": {"links": links}}
     except Exception as e:
-        print(e)
-        return {"error": str(e)}
+        error_message = f"Error: {str(e)}"
+        logging.error(error_message)
+        return {"code": 500, "data": {"error": error_message}}
+
 
 @app.get("/check_url")
 async def check_url(url: str, depth: int = 1):
@@ -69,12 +88,17 @@ async def check_url(url: str, depth: int = 1):
             analyzer.analyze_content(p.content)
             categories_resp = [categories.get(key) for key in list(analyzer.get_score(depth=depth).keys())]
             themes_resp = list(analyzer.get_score(depth=depth).keys())
-            cache.set_data(url, [[categories.get(key) for key in list(analyzer.get_score().keys())], list(analyzer.get_score(depth=depth).keys())])
+            cache.set_data(url, [[categories.get(key) for key in list(analyzer.get_score().keys())],
+                                 list(analyzer.get_score(depth=depth).keys())])
             cache.save_cache()
+        if depth == 1:
+            return {"category": categories_resp[0], "theme": themes_resp[0]}
         return {"code": 200, "data": {"categories": categories_resp, "themes": themes_resp}}
     except Exception as e:
-        print(e)
-        return {"error": str(e)}
+        error_message = f"Error: {str(e)}"
+        logging.error(error_message)
+        return {"code": 500, "data": {"error": error_message}}
+
 
 @app.post("/check_urls")
 async def check_urls(request_data: Dict[str, List[str]], depth: int = 1):
@@ -88,11 +112,11 @@ async def check_urls(request_data: Dict[str, List[str]], depth: int = 1):
     Returns:
         Dict: A dictionary containing the results for each URL.
     """
-    urls = request_data.get("urls", [])
-    results = []
+    try:
+        urls = request_data.get("urls", [])
+        results = []
 
-    for url in urls:
-        try:
+        for url in urls:
             cache.load_cache()
             cached_data = cache.get_data(url)
             if cached_data:
@@ -111,15 +135,18 @@ async def check_urls(request_data: Dict[str, List[str]], depth: int = 1):
                                      list(analyzer.get_score(depth=depth).keys())])
                 cache.save_cache()
 
-            result = {"url": url, "categories": categories_resp, "themes": themes_resp}
+            if depth == 1:
+                result = {"url": url, "category": categories_resp[0], "theme": themes_resp[0]}
+            else:
+                result = {"url": url, "categories": categories_resp, "themes": themes_resp}
             results.append(result)
 
-        except Exception as e:
-            print(e)
-            result = {"url": url, "error": str(e)}
-            results.append(result)
+        return {"code": 200, "data": results}
+    except Exception as e:
+        error_message = f"Error: {str(e)}"
+        logging.error(error_message)
+        return {"code": 500, "data": {"error": error_message}}
 
-    return {"code": 200, "data": results}
 
 @app.get('/check_domain')
 async def check_domain(url: str, depth: int = 1):
@@ -145,5 +172,6 @@ async def check_domain(url: str, depth: int = 1):
             }
         return {"code": 200, "data": results}
     except Exception as e:
-        print(e)
-        return {"error": str(e)}
+        error_message = f"Error: {str(e)}"
+        logging.error(error_message)
+        return {"code": 500, "data": {"error": error_message}}
