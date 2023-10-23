@@ -28,8 +28,8 @@ WRA (Web Resource Analyzer) is a tool for analyzing web resources, checking URLs
 Clone the repository and install the required dependencies:
 
 ```bash
-git clone https://git.codenrock.com/kokoc-2023/cnrprod-team-58908/theme-web-resources-kokoc
-cd theme-web-resources-kokoc
+git clone https://github.com/MorugaShestuck/Web-Resource-Analyzer
+cd Web-Resource-Analyzer
 pip install -r requirements.txt
 ```
 
